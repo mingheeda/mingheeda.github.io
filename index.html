@@ -8,7 +8,7 @@
         :root {
             --card-width: 360px; /* 카드 너비 360px 지정 */            
             --transition-speed: 0.6s;
-            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);            
         }
 
         * {
@@ -26,6 +26,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            background-color:transparent;
         }
 
         .instruction {
@@ -40,6 +41,7 @@
             max-width: var(--card-width);
             perspective: 1000px;
             cursor: pointer;
+            background-color:transparent;
         }
 
         /* aspect-ratio 제거 및 relative 설정 */
@@ -50,6 +52,7 @@
             transition: transform var(--transition-speed) cubic-bezier(0.4, 0.2, 0.2, 1);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
+            background-color:transparent;
         }
 
         .card-container:hover .card {
