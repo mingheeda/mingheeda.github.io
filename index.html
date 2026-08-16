@@ -6,7 +6,9 @@
     <title>3D Card Flip Interactive</title>
     <style>
         :root {
-            --card-width: 360px;            
+            --bg-color: #0f172a;
+            --card-width: 360px; /* 카드 너비 360px 지정 */
+            --border-radius: 16px;
             --transition-speed: 0.6s;
             --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
         }
@@ -37,7 +39,6 @@
             text-align: center;
         }
 
-        /* 3D 공간 설정을 위한 원근감(perspective) 컨테이너 */
         .card-container {
             width: 100%;
             max-width: var(--card-width);
@@ -45,10 +46,9 @@
             cursor: pointer;
         }
 
-        /* 3:4 비율을 유지하는 카드 */
+        /* aspect-ratio 제거 및 relative 설정 */
         .card {
             width: 100%;
-            hight: auto;
             position: relative;
             transform-style: preserve-3d;
             transition: transform var(--transition-speed) cubic-bezier(0.4, 0.2, 0.2, 1);
@@ -56,23 +56,17 @@
             box-shadow: var(--shadow);
         }
 
-        /* 호버 시 그림자 살짝 커지는 효과 */
         .card-container:hover .card {
             box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.6), 0 12px 15px -6px rgba(0, 0, 0, 0.4);
         }
 
-        /* 뒤집혔을 때의 상태 (Y축 180도 회전) */
         .card.flipped {
             transform: rotateY(180deg);
         }
 
-        /* 카드 앞/뒷면 공통 스타일 */
+        /* 공통 스타일에서 absolute 제거 */
         .card-face {
-            position: absolute;
             width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             border-radius: var(--border-radius);
@@ -81,26 +75,30 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* 앞면이 카드 전체 높이를 결정하도록 relative 처리 */
+        .card-front {
+            position: relative;
+            transform: rotateY(0deg);
+        }
+
+        /* 뒷면은 앞면 레이어 위에 겹쳐지도록 absolute 처리 */
+        .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            transform: rotateY(180deg);
+        }
+
+        /* 이미지 높이를 auto로 변경하여 비율에 맞게 조절 */
         .card-face img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
             display: block;
             user-select: none;
             -webkit-user-drag: none;
         }
 
-        /* 앞면 설정 */
-        .card-front {
-            transform: rotateY(0deg);
-        }
-
-        /* 뒷면 설정 (초기에 180도 회전시켜둠) */
-        .card-back {
-            transform: rotateY(180deg);
-        }
-
-        /* 이미지 로드 전 또는 경로 오류 시 가이드 텍스트 */
         .fallback-text {
             position: absolute;
             top: 50%;
@@ -117,7 +115,7 @@
 
     <div class="card-container" id="cardContainer" tabindex="0" role="button" aria-label="카드 뒤집기">
         <div class="card" id="card">
-            <!-- 앞면 -->
+            <!-- 앞면 (카드 전체 높이 기준 역할) -->
             <div class="card-face card-front">
                 <span class="fallback-text">앞면 이미지 (front.png)</span>
                 <img src="./images/front.png" alt="카드 앞면" onerror="this.style.display='none'">
@@ -135,15 +133,12 @@
             const cardContainer = document.getElementById('cardContainer');
             const card = document.getElementById('card');
 
-            // 카드 토글 함수
             const toggleFlip = () => {
                 card.classList.toggle('flipped');
             };
 
-            // 마우스 클릭 이벤트
             cardContainer.addEventListener('click', toggleFlip);
 
-            // 키보드 접근성 (Space 또는 Enter 키)
             cardContainer.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
