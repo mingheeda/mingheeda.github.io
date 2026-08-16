@@ -6,9 +6,8 @@
     <title>3D Card Flip Interactive</title>
     <style>
         :root {
-            --card-width: 360px; /* 카드 너비 360px 지정 */            
+            --card-width: 360px; /* 카드 너비 360px 지정 */
             --transition-speed: 0.6s;
-            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);            
         }
 
         * {
@@ -18,7 +17,8 @@
         }
 
         body {
-            background-color: var(--bg-color);
+            /* 전체 페이지 배경도 투명하게 처리 (필요시 색상 지정 가능) */
+            background-color: transparent;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             min-height: 100vh;
             display: flex;
@@ -26,12 +26,13 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            background-color:transparent;
+            color: #f8fafc;
         }
 
         .instruction {
             margin-bottom: 24px;
             font-size: 1.1rem;
+            color: #94a3b8;
             letter-spacing: 0.05em;
             text-align: center;
         }
@@ -41,37 +42,30 @@
             max-width: var(--card-width);
             perspective: 1000px;
             cursor: pointer;
-            background-color:transparent;
+            background: transparent;
         }
 
-        /* aspect-ratio 제거 및 relative 설정 */
+        /* 그림자 및 배경 제거 */
         .card {
             width: 100%;
             position: relative;
             transform-style: preserve-3d;
             transition: transform var(--transition-speed) cubic-bezier(0.4, 0.2, 0.2, 1);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            background-color:transparent;
-        }
-
-        .card-container:hover .card {
-            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.6), 0 12px 15px -6px rgba(0, 0, 0, 0.4);
+            background: transparent;
         }
 
         .card.flipped {
             transform: rotateY(180deg);
         }
 
-        /* 공통 스타일에서 absolute 제거 */
+        /* 카드면 공통: 배경색, border, radius, shadow 완전 제거 */
         .card-face {
             width: 100%;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            background-color:transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: transparent;
+            border: none;
+            outline: none;
         }
 
         /* 앞면이 카드 전체 높이를 결정하도록 relative 처리 */
@@ -89,13 +83,14 @@
             transform: rotateY(180deg);
         }
 
-        /* 이미지 높이를 auto로 변경하여 비율에 맞게 조절 */
+        /* 이미지 요소 자체의 배경도 투명하게 유지 */
         .card-face img {
             width: 100%;
             height: auto;
             display: block;
             user-select: none;
             -webkit-user-drag: none;
+            background: transparent;
         }
 
         .fallback-text {
@@ -104,6 +99,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 1rem;
+            color: #64748b;
             pointer-events: none;
             z-index: -1;
         }
