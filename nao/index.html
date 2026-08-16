@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Card Flip Interactive</title>
+    <style>
+        :root {
+            --card-width: 360px; /* 카드 너비 360px 지정 */
+            --transition-speed: 0.6s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* 전체 페이지 배경도 투명하게 처리 (필요시 색상 지정 가능) */
+            background-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #f8fafc;
+        }
+
+        .instruction {
+            margin-bottom: 24px;
+            font-size: 1.1rem;
+            color: #94a3b8;
+            letter-spacing: 0.05em;
+            text-align: center;
+        }
+
+        .card-container {
+            width: 100%;
+            max-width: var(--card-width);
+            perspective: 1000px;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        /* 그림자 및 배경 제거 */
+        .card {
+            width: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform var(--transition-speed) cubic-bezier(0.4, 0.2, 0.2, 1);
+            background: transparent;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* 카드면 공통: 배경색, border, radius, shadow 완전 제거 */
+        .card-face {
+            width: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        /* 앞면이 카드 전체 높이를 결정하도록 relative 처리 */
+        .card-front {
+            position: relative;
+            transform: rotateY(0deg);
+        }
+
+        /* 뒷면은 앞면 레이어 위에 겹쳐지도록 absolute 처리 */
+        .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            transform: rotateY(180deg);
+        }
+
+        /* 이미지 요소 자체의 배경도 투명하게 유지 */
+        .card-face img {
+            width: 100%;
+            height: auto;
+            display: block;
+            user-select: none;
+            -webkit-user-drag: none;
+            background: transparent;
+        }
+
+        .fallback-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1rem;
+            color: #64748b;
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-container" id="cardContainer" tabindex="0" role="button" aria-label="카드 뒤집기">
+        <div class="card" id="card">
+            <!-- 앞면 (카드 전체 높이 기준 역할) -->
+            <div class="card-face card-front">
+                <span class="fallback-text">앞면 이미지 (front.png)</span>
+                <img src="./images/naofront.png" alt="카드 앞면" onerror="this.style.display='none'">
+            </div>
+            <!-- 뒷면 -->
+            <div class="card-face card-back">
+                <span class="fallback-text">뒷면 이미지 (back.png)</span>
+                <img src="./images/naoback.png" alt="카드 뒷면" onerror="this.style.display='none'">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cardContainer = document.getElementById('cardContainer');
+            const card = document.getElementById('card');
+
+            const toggleFlip = () => {
+                card.classList.toggle('flipped');
+            };
+
+            cardContainer.addEventListener('click', toggleFlip);
+
+            cardContainer.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleFlip();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
